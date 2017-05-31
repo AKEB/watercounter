@@ -1,6 +1,6 @@
 # README #
 
-![IMG_0040.jpg](https://bitbucket.org/repo/gkkjM4R/images/3806246916-IMG_0040.jpg)
+![IMG_0148.JPG.jpeg](https://bitbucket.org/repo/qEzRgg4/images/3018069817-IMG_0148.JPG.jpeg)
 
 ## Ссылки ##
 * [wifi-iot.com](https://wifi-iot.com/)
