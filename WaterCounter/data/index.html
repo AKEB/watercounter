@@ -10,12 +10,14 @@
 		<title>Главная</title>
 		<script type="text/javascript">
 			var timer = null;
+			var edit = false;
 			function handleServerResponse(){
+				if (edit) return false;
 				console.log('handleServerResponse');
 				console.dir(jsonResponse);
 				
-				setValue("ColdWaterCounter", '<input type="text" value="' + jsonResponse.ColdWaterCounter + '" id="ColdWaterCounter" name="cold" onChange="changeWaterCounter(this);" onfocus="stopTimer();" onblur="startTimer();">');
-				setValue("HotWaterCounter", '<input type="text" value="' + jsonResponse.HotWaterCounter + '" id="HotWaterCounter" name="hot" onChange="changeWaterCounter(this);" onfocus="stopTimer();" onblur="startTimer();">');
+				setValue("ColdWaterCounter", '<input type="text" value="' + Number(jsonResponse.ColdWaterCounter/100).toFixed(2) + '" id="ColdWaterCounter" name="cold" onChange="changeWaterCounter(this);" onfocus="stopTimer();" onblur="startTimer();">');
+				setValue("HotWaterCounter", '<input type="text" value="' + Number(jsonResponse.HotWaterCounter/100).toFixed(2) + '" id="HotWaterCounter" name="hot" onChange="changeWaterCounter(this);" onfocus="stopTimer();" onblur="startTimer();">');
 				setValue("ALERT", jsonResponse.ALERT);
 				
 				var alert = document.getElementById("ALERT");
@@ -25,31 +27,35 @@
 				
 				document.body.style.backgroundColor="rgb("+jsonResponse.rgb+")";
 				
-				startTimer();
+				timer = setTimeout(function(){
+					load();
+				}, 5000);
 			}
 			
 			function stopTimer() {
 				console.log('stopTimer');
+				edit = true;
 				clearTimeout(timer);
 			}
 			
 			function startTimer() {
 				console.log('startTimer');
+				edit = false;
 				timer = setTimeout(function(){
 					load();
-				}, 3000);
+				}, 300);
 			}
 			
 			function changeWaterCounter(obj) {
 				console.log('changeWaterCounter');
-				console.log(obj.name + ' = ' + obj.value);
 				
-				server = "/water?"+obj.name+"="+obj.value;
+				server = "/water"+obj.name+"?"+obj.name+"="+Number((Number(obj.value)+0) * 100).toFixed(0);
+				console.log(server);
 				request = new XMLHttpRequest();
 				request.open("GET", server, true);
 				request.send();
 				
-				startTimer();
+				//startTimer();
 			}
 			
 		</script>

@@ -17,12 +17,14 @@ void Water_loop() {
 }
 
 void handle_Set_WaterCold() {
+	Serial.println(HTTP.arg("cold").toInt());
 	ColdWaterCount = HTTP.arg("cold").toInt();
 	saveConfig();                         // Функция сохранения данных во Flash
 	HTTP.send(200, "text/plain", "OK");   // отправляем ответ о выполнении
 }
 
 void handle_Set_WaterHot() {
+	Serial.println(HTTP.arg("hot").toInt());
 	HotWaterCount = HTTP.arg("hot").toInt();
 	saveConfig();                         // Функция сохранения данных во Flash
 	HTTP.send(200, "text/plain", "OK");   // отправляем ответ о выполнении

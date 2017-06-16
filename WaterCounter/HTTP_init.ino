@@ -38,6 +38,7 @@ void handle_Set_Ssidap() {              //
 
 // Перезагрузка модуля по запросу вида http://192.168.0.101/restart?device=ok
 void handle_Restart() {
+	saveConfig();
 	String restart = HTTP.arg("device");               // Получаем значение device из запроса
 	if (restart == "ok") {                             // Если значение равно Ок
 		HTTP.send(200, "text / plain", "Reset OK");    // Oтправляем ответ Reset OK
@@ -74,8 +75,8 @@ void handle_ConfigJSON() {
 	json["ALERT"] = Alert > 0 ? "Да" : "Нет";
 	json["AlertClass"] = Alert > 0 ? "danger" : "success";
 
-	json["ColdWaterCounter"] = ColdWaterCount/100;
-	json["HotWaterCounter"] = HotWaterCount/100;
+	json["ColdWaterCounter"] = ColdWaterCount;
+	json["HotWaterCounter"] = HotWaterCount;
 
 	json["Uptime"] = uptime();
 	
