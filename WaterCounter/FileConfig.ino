@@ -1,4 +1,14 @@
 
+void FileConfig_loop() {
+	// Сохраняем файл настроек раз в час, если есть изменения
+	if (currentMillis < save_previous_millis) save_previous_millis = 0;
+	if (currentMillis - save_previous_millis >= save_time_interval) {
+		Serial.println("Check Save Config");
+		save_previous_millis = currentMillis;
+		saveConfig();
+	}
+}
+
 // Загрузка данных сохраненных в файл  config.json
 bool loadConfig() {
 	// Открываем файл для чтения
@@ -39,6 +49,11 @@ bool loadConfig() {
 	Alert = root["Alert"];
 	SaveCount = root["SaveCount"];
 	
+	_mqtt_host = root["mqtt_host"].as<String>();
+	_mqtt_port = root["mqtt_port"];
+	_mqtt_user = root["mqtt_user"].as<String>();
+	_mqtt_password = root["mqtt_password"].as<String>();
+	
 	return true;
 }
 
@@ -59,7 +74,12 @@ bool saveConfig() {
 	json["HotWaterCount"] = HotWaterCount;
 	json["Alert"] = Alert;
 	json["SaveCount"] = SaveCount;
-
+	
+	json["mqtt_host"] = _mqtt_host;
+	json["mqtt_port"] = _mqtt_port;
+	json["mqtt_user"] = _mqtt_user;
+	json["mqtt_password"] = _mqtt_password;
+	
 	// Помещаем созданный json в глобальную переменную json.printTo(jsonConfig);
 	String NewString = "";
 	json.printTo(NewString);
@@ -73,15 +93,6 @@ bool saveConfig() {
 	jsonConfig = "";
 	json.printTo(jsonConfig);
 	
-	/*
-	File configFile = SPIFFS.open("/config.json", "r");
-	if (configFile) {
-		String oldString = configFile.readString();
-		configFile.close();
-
-		if (oldString.equals(jsonConfig)) return true;
-	}
-	*/
 	Serial.println("Save File");
 	// Открываем файл для записи
 	File configFile = SPIFFS.open("/config.json", "w");
@@ -96,4 +107,5 @@ bool saveConfig() {
 	
 	return true;
 }
+
 

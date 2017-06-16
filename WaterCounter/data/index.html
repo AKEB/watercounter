@@ -9,12 +9,13 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Главная</title>
 		<script type="text/javascript">
+			var timer = null;
 			function handleServerResponse(){
 				console.log('handleServerResponse');
 				console.dir(jsonResponse);
 				
-				setValue("ColdWaterCounter", jsonResponse.ColdWaterCounter);
-				setValue("HotWaterCounter", jsonResponse.HotWaterCounter);
+				setValue("ColdWaterCounter", '<input type="text" value="' + jsonResponse.ColdWaterCounter + '" id="ColdWaterCounter" name="cold" onChange="changeWaterCounter(this);" onfocus="stopTimer();" onblur="startTimer();">');
+				setValue("HotWaterCounter", '<input type="text" value="' + jsonResponse.HotWaterCounter + '" id="HotWaterCounter" name="hot" onChange="changeWaterCounter(this);" onfocus="stopTimer();" onblur="startTimer();">');
 				setValue("ALERT", jsonResponse.ALERT);
 				
 				var alert = document.getElementById("ALERT");
@@ -24,10 +25,33 @@
 				
 				document.body.style.backgroundColor="rgb("+jsonResponse.rgb+")";
 				
-				setTimeout(function(){
-					load();
-				}, 5000);
+				startTimer();
 			}
+			
+			function stopTimer() {
+				console.log('stopTimer');
+				clearTimeout(timer);
+			}
+			
+			function startTimer() {
+				console.log('startTimer');
+				timer = setTimeout(function(){
+					load();
+				}, 3000);
+			}
+			
+			function changeWaterCounter(obj) {
+				console.log('changeWaterCounter');
+				console.log(obj.name + ' = ' + obj.value);
+				
+				server = "/water?"+obj.name+"="+obj.value;
+				request = new XMLHttpRequest();
+				request.open("GET", server, true);
+				request.send();
+				
+				startTimer();
+			}
+			
 		</script>
 	</head>
 	<body onload="load();">
@@ -37,7 +61,7 @@
 				<div class="col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
 					<h5 class="alert-info" id="ssdp_t">Меню</h5>
 					<p>
-						<a class="btn btn-block btn-danger btn-block" href="/">Главная</a>
+						<a class="btn btn-block btn-success btn-block" href="/">Главная</a>
 						<a class="btn btn-block btn-default btn-block" href="/settings.html">Настройки</a>
 					</p>
 					<hr>
@@ -50,11 +74,11 @@
 							<table class="table table-condensed">
 								<tr class="info">
 									<td width="1%">ХВС</td>
-									<td id="ColdWaterCounter">{ColdWaterCounter}</td>
+									<td id="ColdWaterCounter"></td>
 								</tr>
 								<tr class="">
 									<td style="background-color: #f2dede;" width="1%">ГВС</td>
-									<td style="background-color: #f2dede;" id="HotWaterCounter">{HotWaterCounter}</td>
+									<td style="background-color: #f2dede;" id="HotWaterCounter"></td>
 								</tr>
 								
 								<tr class="">

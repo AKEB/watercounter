@@ -1,6 +1,14 @@
-void WIFIinit() {
+
+void WIFI_init() {
+	pinMode(INNER_LED_PIN, OUTPUT);
+	WIFI_start();
+}
+
+void WIFI_start() {
 	// Попытка подключения к точке доступа
+	
 	WiFi.mode(WIFI_STA);
+	wifi_mode = WIFI_STA;
 	digitalWrite(INNER_LED_PIN, LOW);
 	
 	byte tries = 15;
@@ -17,14 +25,12 @@ void WIFIinit() {
 	
 	if (WiFi.status() != WL_CONNECTED) {
 		digitalWrite(INNER_LED_PIN, LOW);
-		wifi_mode_time = 100;
 		// Если не удалось подключиться запускаем в режиме AP
 		Serial.println("");
 		Serial.println("WiFi up AP");
 		StartAPMode();
 	} else {
 		digitalWrite(INNER_LED_PIN, HIGH);
-		wifi_mode_time = 2000;
 		// Иначе удалось подключиться отправляем сообщение
 		// о подключении и выводим адрес IP
 		Serial.println("");
@@ -34,12 +40,31 @@ void WIFIinit() {
 	}
 }
 
+void WIFI_loop() {
+	// Мигаем встроенной лампочкой
+	if (currentMillis < wifi_mode_previous_millis) wifi_mode_previous_millis = 0;
+	if(currentMillis - wifi_mode_previous_millis >= wifi_mode_time) {
+		wifi_mode_previous_millis = currentMillis;
+		if (inner_led_state == LOW) {
+ 			inner_led_state = HIGH;  // Note that this switches the LED *off*
+ 			if (wifi_mode == WIFI_STA) wifi_mode_time = 5000;
+ 			else wifi_mode_time = 100;
+		} else {
+			inner_led_state = LOW;   // Note that this switches the LED *on*
+			if (wifi_mode == WIFI_STA) wifi_mode_time = 200;
+ 			else wifi_mode_time = 100;
+		}
+		digitalWrite(INNER_LED_PIN, inner_led_state);
+	}
+}
+
 bool StartAPMode() {
 	IPAddress apIP(192, 168, 0, 1);
 	// Отключаем WIFI
 	WiFi.disconnect();
 	// Меняем режим на режим точки доступа
 	WiFi.mode(WIFI_AP);
+	wifi_mode = WIFI_AP;
 	// Задаем настройки сети
 	WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
 	// Включаем WIFI в режиме точки доступа с именем и паролем

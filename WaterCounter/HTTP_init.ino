@@ -64,6 +64,11 @@ void handle_ConfigJSON() {
 	json["ip"] = WiFi.localIP().toString();
 	json["time"] = GetTime();
 	json["date"] = GetDate();
+
+	json["mqtt_host"] = _mqtt_host;
+	json["mqtt_port"] = _mqtt_port;
+	json["mqtt_user"] = _mqtt_user;
+	json["mqtt_password"] = _mqtt_password;
 	
 	json["SaveCount"] = SaveCount;
 	json["ALERT"] = Alert > 0 ? "Да" : "Нет";

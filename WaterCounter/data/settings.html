@@ -17,8 +17,6 @@
 				real_time(hours=res[0],min=res[1],sec=res[2]);
 				document.body.style.backgroundColor="rgb("+jsonResponse.rgb+")";
 				
-				setValue("SaveCount", jsonResponse.SaveCount);
-				
 			}
 			
 			function load_time(submit){
@@ -57,6 +55,11 @@
 				document.getElementById('ssdp_t').innerHTML = val('ssdp');
 			}
 			
+			function set_mqtt(submit){
+				server = "/mqtt?mqtt_host="+val('mqtt_host')+"&mqtt_port="+val('mqtt_port')+"&mqtt_user="+val('mqtt_user')+"&mqtt_password="+encodeURIComponent(val('mqtt_password'));
+				send_request(submit,server);
+				//alert("Измененя вступят в силу после перезагрузки. Пожалуйта перезагрузите устройство.");
+			}
 			
 		</script>
 	</head>
@@ -66,8 +69,10 @@
 				<h1 style="margin:50px;">{{SSDP}} - Настройки</h1>
 				<div class="col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
 					<h5 class="alert-info" id="ssdp_t">Меню</h5>
-					<a class="btn btn-block btn-danger" href="/">Главная</a>
-					<a class="btn btn-block btn-default" href="/settings.html">Настройки</a>
+					<p>
+						<a class="btn btn-block btn-success btn-block" href="/">Главная</a>
+						<a class="btn btn-block btn-default btn-block" href="/settings.html">Настройки</a>
+					</p>
 					<hr>
 					<div class="alert alert-dismissible alert-warning">
 						<strong>Пожалуйста подключитесь к своему роутеру и укажите ниже вашу GMT зону.</strong>
@@ -99,8 +104,16 @@
 					<input class="btn btn-block btn-primary" value="Синхронизировать время" onclick="load_time(this);" type="submit">
 					<h4>{{Uptime}}</h4>
 					<h4>Кол-во записей: {{SaveCount}}</h4>
-					
 					<hr>
+					
+					<h2>MQTT Server</h2>
+					<input id="mqtt_host" value="{{mqtt_host}}" class="form-control" placeholder="IP адрес MQTT Сервера">
+					<input id="mqtt_port" value="{{mqtt_port}}" class="form-control" placeholder="Port для MQTT Сервера">
+					<input id="mqtt_user" value="{{mqtt_user}}" class="form-control" placeholder="Пользователь">
+					<input id="mqtt_password" value="{{mqtt_password}}" pattern=".{1,15}" onfocus="this.type='text'" type="password" class="form-control" placeholder="Пароль">
+					<input class="btn btn-block btn-success" value="Сохранить" onclick="set_mqtt(this);" type="submit">
+					<hr>
+					
 					<h2>Точка доступа</h2>
 					<div class="row">
 						<div class="col-sm-6">

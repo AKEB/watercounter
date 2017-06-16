@@ -41,6 +41,7 @@ function val(id){
 }
 
 function setValue(id, html) {
+	console.log('Set value for '+id);
 	document.getElementById(id).innerHTML = html;
 	return true;
 }
