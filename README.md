@@ -20,12 +20,7 @@
 * ALARM - D6 - GPIO12
 
 
-
-
-
-
 ## Ссылки ##
-* [wifi-iot.com](https://wifi-iot.com/)
 * [esptool-gui](https://github.com/Rodmg/esptool-gui)
 * [esptool](https://github.com/espressif/esptool)
 
