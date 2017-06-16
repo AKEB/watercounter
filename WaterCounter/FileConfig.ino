@@ -59,18 +59,27 @@ bool saveConfig() {
 	json["Alert"] = Alert;
 
 	// Помещаем созданный json в глобальную переменную json.printTo(jsonConfig);
-	json.printTo(jsonConfig);
+	String NewString = "";
+	json.printTo(NewString);
 	
+	if (jsonConfig.equals(NewString)) {
+		return true;
+	}
+	
+	jsonConfig = NewString;
+	//json.printTo(jsonConfig);
+	/*
 	File configFile = SPIFFS.open("/config.json", "r");
 	if (configFile) {
 		String oldString = configFile.readString();
 		configFile.close();
+
 		if (oldString.equals(jsonConfig)) return true;
-		
 	}
+	*/
 	Serial.println("Save File");
 	// Открываем файл для записи
-	configFile = SPIFFS.open("/config.json", "w");
+	File configFile = SPIFFS.open("/config.json", "w");
 	if (!configFile) {
 		//Serial.println("Failed to open config file for writing");
 		configFile.close();
