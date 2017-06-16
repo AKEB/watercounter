@@ -20,6 +20,8 @@
 				var alert = document.getElementById("ALERT");
 				alert.className = ""+jsonResponse.AlertClass
 				
+				setValue("Uptime", jsonResponse.Uptime);
+				
 				document.body.style.backgroundColor="rgb("+jsonResponse.rgb+")";
 				
 				setTimeout(function(){
@@ -39,6 +41,7 @@
 						<a class="btn btn-block btn-default btn-block" href="/settings.html">Настройки</a>
 					</p>
 					<hr>
+					<h4 id="Uptime">{Uptime}</h4>
 					
 					<h2>Показания Счетчиков</h2>
 					<div class="row">

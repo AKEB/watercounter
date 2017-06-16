@@ -17,7 +17,7 @@ void WIFIinit() {
 	
 	if (WiFi.status() != WL_CONNECTED) {
 		digitalWrite(INNER_LED_PIN, LOW);
-		wifi_mode_time = 200;
+		wifi_mode_time = 100;
 		// Если не удалось подключиться запускаем в режиме AP
 		Serial.println("");
 		Serial.println("WiFi up AP");

@@ -64,12 +64,15 @@ void handle_ConfigJSON() {
 	json["ip"] = WiFi.localIP().toString();
 	json["time"] = GetTime();
 	json["date"] = GetDate();
-
+	
+	json["SaveCount"] = SaveCount;
 	json["ALERT"] = Alert > 0 ? "Да" : "Нет";
 	json["AlertClass"] = Alert > 0 ? "danger" : "success";
 
 	json["ColdWaterCounter"] = ColdWaterCount/100;
 	json["HotWaterCounter"] = HotWaterCount/100;
+
+	json["Uptime"] = uptime();
 	
 	// Помещаем созданный json в переменную root
 	root = "";

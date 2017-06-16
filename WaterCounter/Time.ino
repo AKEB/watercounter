@@ -55,3 +55,21 @@ String GetDate() {
 	Data.replace(Time, ""); // Удаляем из строки 8 символов времени и пробел
 	return Data; // Возврашаем полученную дату
 }
+
+// Function made to millis() be an optional parameter
+char *uptime() {
+	return (char *)uptime(millis()); // call original uptime function with unsigned long millis() value
+}
+
+char *uptime(unsigned long milli) {
+	static char _return[32];
+	unsigned long secs=milli/1000, mins=secs/60;
+	unsigned int hours=mins/60, days=hours/24;
+	milli-=secs*1000;
+	secs-=mins*60;
+	mins-=hours*60;
+	hours-=days*24;
+	days = days+ (Rollover*50);
+	sprintf(_return,"Uptime %d days %02d:%02d:%02d.%03d", (byte)days, (byte)hours, (byte)mins, (byte)secs, (int)milli);
+	return _return;
+}

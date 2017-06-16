@@ -17,7 +17,7 @@
 				real_time(hours=res[0],min=res[1],sec=res[2]);
 				document.body.style.backgroundColor="rgb("+jsonResponse.rgb+")";
 				
-				
+				setValue("SaveCount", jsonResponse.SaveCount);
 				
 			}
 			
@@ -97,6 +97,9 @@
 					<input class="btn btn-block btn-primary" value="Авто определение и сохранение зоны" onclick="set_time_zone(this);" type="submit">
 					<h2>На устройстве сейчас <strong id="time">{{time}}</strong></h2>
 					<input class="btn btn-block btn-primary" value="Синхронизировать время" onclick="load_time(this);" type="submit">
+					<h4>{{Uptime}}</h4>
+					<h4>Кол-во записей: {{SaveCount}}</h4>
+					
 					<hr>
 					<h2>Точка доступа</h2>
 					<div class="row">

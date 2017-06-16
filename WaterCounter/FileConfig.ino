@@ -37,6 +37,7 @@ bool loadConfig() {
 	ColdWaterCount = root["ColdWaterCount"];
 	HotWaterCount = root["HotWaterCount"];
 	Alert = root["Alert"];
+	SaveCount = root["SaveCount"];
 	
 	return true;
 }
@@ -57,6 +58,7 @@ bool saveConfig() {
 	json["ColdWaterCount"] = ColdWaterCount;
 	json["HotWaterCount"] = HotWaterCount;
 	json["Alert"] = Alert;
+	json["SaveCount"] = SaveCount;
 
 	// Помещаем созданный json в глобальную переменную json.printTo(jsonConfig);
 	String NewString = "";
@@ -65,9 +67,12 @@ bool saveConfig() {
 	if (jsonConfig.equals(NewString)) {
 		return true;
 	}
+
+	SaveCount = SaveCount + 1;
+	json["SaveCount"] = SaveCount;
+	jsonConfig = "";
+	json.printTo(jsonConfig);
 	
-	jsonConfig = NewString;
-	//json.printTo(jsonConfig);
 	/*
 	File configFile = SPIFFS.open("/config.json", "r");
 	if (configFile) {

@@ -43,6 +43,7 @@ int timezone = 3;               // часовой пояс GTM
 int ColdWaterCount = 0;
 int HotWaterCount = 0;
 int Alert = 0;
+int SaveCount = 0;
 
 String jsonConfig = "{}";
 int port = 80;
@@ -52,9 +53,11 @@ unsigned long wifi_mode_previous_millis = 0;
 int inner_led_state = LOW;
 
 
+int save_time_interval = 60*60*1000;
+unsigned long save_previous_millis = 0;
 
-
-
+int HighMillis=0;
+int Rollover=0;
 
 void setup() {
 	
@@ -91,10 +94,22 @@ void setup() {
 }
 
 void loop() {
+	unsigned long currentMillis = millis();
+	
+	if(currentMillis>=3000000000){ 
+		HighMillis=1;
+	}
+	//** Making note of actual rollover **//
+	if(currentMillis<=100000 && HighMillis==1){
+		Rollover++;
+		HighMillis=0;
+	}
+	
 	HTTP.handleClient();
 	delay(1);
 	
-	unsigned long currentMillis = millis();
+	// Мигаем встроенной лампочкой
+	if (currentMillis < wifi_mode_previous_millis) wifi_mode_previous_millis = 0;
 	if(currentMillis - wifi_mode_previous_millis >= wifi_mode_time) {
 		wifi_mode_previous_millis = currentMillis;   
 		if (inner_led_state == LOW)
@@ -102,6 +117,14 @@ void loop() {
 		else
 			inner_led_state = LOW;   // Note that this switches the LED *on*
 		digitalWrite(INNER_LED_PIN, inner_led_state);
+	}
+
+	// Сохраняем файл настроек раз в час, если есть изменения
+	if (currentMillis < save_previous_millis) save_previous_millis = 0;
+	if (currentMillis - save_previous_millis >= save_time_interval) {
+		Serial.println("Check Save Config");
+		save_previous_millis = currentMillis;
+		saveConfig();
 	}
 }
 
