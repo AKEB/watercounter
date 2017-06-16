@@ -1,5 +1,8 @@
 # README #
 
+Простая плата на базе микросхемы ESP8266 (Wemos D1 mini). Плата считает кол-во импульсов от счетчиков воды (горячей и холодной) и импульс от системы АкваСторож.
+Отображение в web интерфейсе и отправка на сервер умного дома по протоколу MQTT
+
 ![IMG_0254.jpg](https://bitbucket.org/repo/qEzRgg4/images/1915490043-IMG_0254.jpg)
 
 ![WaterCounter_схема.png](https://bitbucket.org/repo/qEzRgg4/images/1898141265-WaterCounter_%D1%81%D1%85%D0%B5%D0%BC%D0%B0.png)
