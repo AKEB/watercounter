@@ -76,7 +76,7 @@ void Water_loop() {
 }
 
 void handle_Set_WaterAlert() {
-	Serial.println("handle_Set_WaterAlert disable=" + HTTP.arg("disable"));
+	error_log("handle_Set_WaterAlert disable=" + HTTP.arg("disable"));
 	if (HTTP.arg("disable").toInt() > 0) {
 		Alert = 0;
 	}
@@ -86,7 +86,6 @@ void handle_Set_WaterAlert() {
 }
 
 void handle_Set_WaterCold() {
-	Serial.println(HTTP.arg("cold").toInt());
 	ColdWaterCount = HTTP.arg("cold").toInt();
 	water_changes_for_send = true;
 	saveConfig();                         // Функция сохранения данных во Flash
@@ -94,7 +93,6 @@ void handle_Set_WaterCold() {
 }
 
 void handle_Set_WaterHot() {
-	Serial.println(HTTP.arg("hot").toInt());
 	HotWaterCount = HTTP.arg("hot").toInt();
 	water_changes_for_send = true;
 	saveConfig();                         // Функция сохранения данных во Flash

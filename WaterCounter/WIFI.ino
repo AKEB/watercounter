@@ -13,31 +13,31 @@ void WIFI_start() {
 	
 	byte tries = 15;
 	WiFi.begin(_ssid.c_str(), _password.c_str());
-	Serial.println("Try connect to " + _ssid);
+	error_log("Try connect to " + _ssid);
 	// Делаем проверку подключения до тех пор пока счетчик tries
 	// не станет равен нулю или не получим подключение
 	while (--tries && WiFi.status() != WL_CONNECTED) {
-		Serial.print(".");
+		error_log(".", false);
 		digitalWrite(INNER_LED_PIN, HIGH);
 		delay(500);
 		digitalWrite(INNER_LED_PIN, LOW);
 		delay(500);
 	}
+	error_log("");
 	
 	if (WiFi.status() != WL_CONNECTED) {
 		digitalWrite(INNER_LED_PIN, LOW);
 		// Если не удалось подключиться запускаем в режиме AP
-		Serial.println("");
-		Serial.println("WiFi up AP");
+		
+		error_log("WiFi up AP");
 		StartAPMode();
 	} else {
 		digitalWrite(INNER_LED_PIN, HIGH);
 		// Иначе удалось подключиться отправляем сообщение
 		// о подключении и выводим адрес IP
-		Serial.println("");
-		Serial.println("WiFi connected");
-		Serial.println("IP address: ");
-		Serial.println(WiFi.localIP());
+		error_log("WiFi connected");
+		error_log("IP address: ", false);
+		error_log((String) WiFi.localIP());
 	}
 }
 

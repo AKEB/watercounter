@@ -25,16 +25,16 @@ void timeSynch(int zone){
 		// Настройка соединения с NTP сервером
 		configTime(zone * 3600, 0, "pool.ntp.org", "ru.pool.ntp.org");
 		int i = 0;
-		Serial.println("\nWaiting for time");
+		error_log("\nWaiting for time");
 		while (!time(nullptr) && i < 10) {
-			Serial.print(".");
+			error_log(".", false);
 			i++;
 			delay(1000);
 		}
-		Serial.println("");
-		Serial.println("ITime Ready!");
-		Serial.println(GetTime());
-		Serial.println(GetDate());
+		error_log("");
+		error_log("ITime Ready!");
+		error_log(GetTime());
+		error_log(GetDate());
 	}
 }
 

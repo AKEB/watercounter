@@ -3,7 +3,7 @@ void FileConfig_loop() {
 	// Сохраняем файл настроек раз в час, если есть изменения
 	if (currentMillis < save_previous_millis) save_previous_millis = 0;
 	if (currentMillis - save_previous_millis >= save_time_interval) {
-		Serial.println("Check Save Config");
+		error_log("Check Save Config");
 		save_previous_millis = currentMillis;
 		saveConfig();
 	}
@@ -15,7 +15,7 @@ bool loadConfig() {
 	File configFile = SPIFFS.open("/config.json", "r");
 	if (!configFile) {
 		// если файл не найден  
-		Serial.println("Failed to open config file");
+		error_log("Failed to open config file");
 		// Создаем файл запиав в него аные по умолчанию
 		saveConfig();
 		configFile.close();
@@ -24,7 +24,7 @@ bool loadConfig() {
 	// Проверяем размер файла, будем использовать файл размером меньше 1024 байта
 	size_t size = configFile.size();
 	if (size > 1024) {
-		Serial.println("Config file size is too large");
+		error_log("Config file size is too large");
 		configFile.close();
 		return false;
 	}
@@ -93,11 +93,10 @@ bool saveConfig() {
 	jsonConfig = "";
 	json.printTo(jsonConfig);
 	
-	Serial.println("Save File");
+	error_log("Save File");
 	// Открываем файл для записи
 	File configFile = SPIFFS.open("/config.json", "w");
 	if (!configFile) {
-		//Serial.println("Failed to open config file for writing");
 		configFile.close();
 		return false;
 	}

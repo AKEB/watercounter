@@ -70,50 +70,72 @@ int alert_led_state = LOW;
 
 boolean water_changes_for_send = true;
 
-WiFiClient wifiClientForMQTT; 
+WiFiClient wifiClientForMQTT;
 PubSubClient clientForMQTT(wifiClientForMQTT);
+
+#define MAX_SRV_CLIENTS 10
+WiFiServer TelnetServer(23);
+WiFiClient TelnetClients[MAX_SRV_CLIENTS];
+
+void error_log(String str) {
+	error_log(str, true);
+}
+
+void error_log(String str, boolean ln) {
+	Serial.print(str);
+	
+	if (ln) Serial.println("");
+	
+	Telnet_error_log(str, ln);
+}
 
 void setup() {
 	HTTP = ESP8266WebServer (port);
+	
+	Telnet_init();
+	
 	Serial.begin(115200);
-	Serial.println("");
+	error_log("");
 	
 	//Запускаем файловую систему
-	Serial.println("Start File System");
+	error_log("Start File System");
 	FS_init();
 	
-	Serial.println("Load Config File");
+	error_log("Load Config File");
 	loadConfig();
 	
-	Serial.println("Start WiFi");
+	error_log("Start WiFi");
 	//Запускаем WIFI
 	WIFI_init();
 	
-	Serial.println("Start Time module");
+	error_log("Start Time module");
 	// Получаем время из сети
 	Time_init();
 
-	Serial.println("Start MQTT module");
+	error_log("Start MQTT module");
 	MQTT_init();
 	
 	//Настраиваем и запускаем SSDP интерфейс
-	Serial.println("Start SSDP");
+	error_log("Start SSDP");
 	SSDP_init();
 	
 	//Настраиваем и запускаем HTTP интерфейс
-	Serial.println("Start WebServer");
+	error_log("Start WebServer");
 	HTTP_init();
 	
 	//Настраиваем и запускаем HTTP интерфейс
-	Serial.println("Start mDNS");
+	error_log("Start mDNS");
 	mDNS_init();
 	
-	Serial.println("Start Water module");
+	error_log("Start Water module");
 	Water_init();
 }
 
 void loop() {
 	HTTP.handleClient();
+	
+	Telnet_loop();
+	
 	delay(1);
 	Time_loop();
 	
