@@ -2,7 +2,7 @@
 
 void Time_init() {
 	HTTP.on("/Time", handle_Time);     // Синхронизировать время устройства по запросу вида /Time
-	HTTP.on("/TimeZone", handle_time_zone);    // Установка времянной зоны по запросу вида http://192.168.0.101/TimeZone?timezone=3
+	HTTP.on("/TimeZone", handle_time_zone);    // Установка времянной зоны по запросу вида /TimeZone?timezone=3
 	timeSynch(timezone);
 	currentMillis = millis();
 }

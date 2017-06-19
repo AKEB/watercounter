@@ -3,7 +3,7 @@
 #include <ESP8266SSDP.h> 
 #include <FS.h>
 #include <ArduinoJson.h>
-
+#include <PubSubClient.h>
 #include <ESP8266HTTPUpdateServer.h>
 
 #define RED_LED_PIN 15
@@ -41,6 +41,10 @@ int HotWaterCount = 0;
 int Alert = 0;
 int SaveCount = 0;
 
+int ColdWaterState = 0;
+int HotWaterState = 0;
+int AlertState = 0;
+
 String jsonConfig = "{}";
 int port = 80;
 
@@ -54,25 +58,40 @@ int wifi_mode_time = 2000;
 int wifi_mode = 0;
 unsigned long wifi_mode_previous_millis = 0;
 int inner_led_state = LOW;
+unsigned long mqtt_reconnect_previous_millis = 0;
+int mqtt_reconnect_interval = 5000;
+unsigned long water_send_previous_millis = 0;
+int water_send_interval = 10000;
+unsigned long water_previous_millis = 0;
+int water_interval = 500;
+unsigned long alert_led_previous_millis = 0;
+int alert_led_interval = 100;
+int alert_led_state = LOW;
+
+boolean water_changes_for_send = true;
+
+WiFiClient wifiClientForMQTT; 
+PubSubClient clientForMQTT(wifiClientForMQTT);
 
 void setup() {
 	HTTP = ESP8266WebServer (port);
 	Serial.begin(115200);
 	Serial.println("");
+	
 	//Запускаем файловую систему
 	Serial.println("Start File System");
 	FS_init();
+	
 	Serial.println("Load Config File");
 	loadConfig();
+	
 	Serial.println("Start WiFi");
 	//Запускаем WIFI
 	WIFI_init();
+	
 	Serial.println("Start Time module");
 	// Получаем время из сети
 	Time_init();
-	
-	Serial.println("Start Water module");
-	Water_init();
 
 	Serial.println("Start MQTT module");
 	MQTT_init();
@@ -80,26 +99,27 @@ void setup() {
 	//Настраиваем и запускаем SSDP интерфейс
 	Serial.println("Start SSDP");
 	SSDP_init();
+	
 	//Настраиваем и запускаем HTTP интерфейс
 	Serial.println("Start WebServer");
 	HTTP_init();
 
+	Serial.println("Start Water module");
+	Water_init();
 }
 
 void loop() {
-	
-	
 	HTTP.handleClient();
 	delay(1);
 	Time_loop();
-
-	Water_loop();
 	
-	MQTT_loop();
-
 	WIFI_loop();
 
 	FileConfig_loop();
+
+	MQTT_loop();
+
+	Water_loop();
 	
 }
 
