@@ -18,10 +18,13 @@
 				
 				setValue("ColdWaterCounter", '<input type="text" value="' + Number(jsonResponse.ColdWaterCounter/100).toFixed(2) + '" id="ColdWaterCounter" name="cold" onChange="changeWaterCounter(this);" onfocus="stopTimer();" onblur="startTimer();">');
 				setValue("HotWaterCounter", '<input type="text" value="' + Number(jsonResponse.HotWaterCounter/100).toFixed(2) + '" id="HotWaterCounter" name="hot" onChange="changeWaterCounter(this);" onfocus="stopTimer();" onblur="startTimer();">');
-				setValue("ALERT", jsonResponse.ALERT);
-				
-				var alert = document.getElementById("ALERT");
-				alert.className = ""+jsonResponse.AlertClass
+				if (jsonResponse.ALERT == "Да") {
+					setValue("ALERT", '<a class="btn btn-block btn-danger btn-block" href="/" onClick="disableAlert();">Да</a>');
+				} else {
+					setValue("ALERT", jsonResponse.ALERT);
+					var alert = document.getElementById("ALERT");
+					alert.className = ""+jsonResponse.AlertClass
+				}
 				
 				setValue("Uptime", jsonResponse.Uptime);
 				
@@ -44,6 +47,15 @@
 				timer = setTimeout(function(){
 					load();
 				}, 300);
+			}
+			
+			function disableAlert() {
+				console.log('disableAlert');
+				server = "/waterAlert?disable=1";
+				console.log(server);
+				request = new XMLHttpRequest();
+				request.open("GET", server, true);
+				request.send();
 			}
 			
 			function changeWaterCounter(obj) {

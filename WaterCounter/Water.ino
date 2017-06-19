@@ -11,6 +11,8 @@ void Water_init() {
 	
 	HTTP.on("/watercold", handle_Set_WaterCold);
 	HTTP.on("/waterhot", handle_Set_WaterHot);
+	HTTP.on("/waterAlert", handle_Set_WaterAlert);
+	
 }
 
 void Water_loop() {
@@ -71,6 +73,16 @@ void Water_loop() {
 			digitalWrite(BLUE_LED_PIN, alert_led_state);
 		}
 	}
+}
+
+void handle_Set_WaterAlert() {
+	Serial.println("handle_Set_WaterAlert disable=" + HTTP.arg("disable"));
+	if (HTTP.arg("disable").toInt() > 0) {
+		Alert = 0;
+	}
+	water_changes_for_send = true;
+	saveConfig();                         // Функция сохранения данных во Flash
+	HTTP.send(200, "text/plain", "OK");   // отправляем ответ о выполнении
 }
 
 void handle_Set_WaterCold() {

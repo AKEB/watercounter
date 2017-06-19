@@ -5,7 +5,7 @@ void MQTT_init() {
 }
 
 void MQTT_loop() {
-	if (wifi_mode != WIFI_STA) return;
+	if (WiFi.status() != WL_CONNECTED) return;
 	
 	if (!clientForMQTT.connected()) {
 		if (currentMillis < mqtt_reconnect_previous_millis) mqtt_reconnect_previous_millis = 0;
@@ -31,7 +31,7 @@ void MQTT_connect() {
 	Serial.println("MQTT connect");
 	if (!_mqtt_host || _mqtt_port < 1) return;
 	
-	if (wifi_mode != WIFI_STA) return;
+	if (WiFi.status() != WL_CONNECTED) return;
 	
 	Serial.println("MQTT set Server IP and PORT");
 	clientForMQTT.setServer(_mqtt_host.c_str(), _mqtt_port);
@@ -63,6 +63,8 @@ void MQTT_connect() {
 }
 
 void MQTT_publish(String topic, String message) {
+	if (WiFi.status() != WL_CONNECTED) return;
+	Serial.println("MQTT publish " + topic + " = " + message);
 	if (!clientForMQTT.connected()) {
 		MQTT_reconnect();
 	}
@@ -80,19 +82,24 @@ void callbackForMQTT(char* topic, byte* payload, unsigned int length) {
 	payload_String = payload_String.substring(0,length);
 	
 	Serial.println("incoming: "+topic_String+" - "+payload_String);
-	
+	boolean saveConfigNeed = false;
 	String t = "home/"+ _ssidAP + "/";
 	
 	topic_String.remove(0, t.length());
 	//Serial.println(topic_String);
 
 	if (topic_String.equals("cold")) {
+		if (ColdWaterCount != payload_String.toInt()) saveConfigNeed = true;
 		ColdWaterCount = payload_String.toInt();
 	} else if (topic_String.equals("hot")) {
+		if (HotWaterCount != payload_String.toInt()) saveConfigNeed = true;
 		HotWaterCount = payload_String.toInt();
 	} else if (topic_String.equals("alert")) {
+		if (Alert != payload_String.toInt()) saveConfigNeed = true;
 		Alert = payload_String.toInt();
 	}
+
+	if (saveConfigNeed) saveConfig();
 }
 
 void handle_Set_MQTT() {

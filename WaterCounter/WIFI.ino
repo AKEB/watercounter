@@ -13,6 +13,7 @@ void WIFI_start() {
 	
 	byte tries = 15;
 	WiFi.begin(_ssid.c_str(), _password.c_str());
+	Serial.println("Try connect to " + _ssid);
 	// Делаем проверку подключения до тех пор пока счетчик tries
 	// не станет равен нулю или не получим подключение
 	while (--tries && WiFi.status() != WL_CONNECTED) {
