@@ -103,7 +103,11 @@ void setup() {
 	//Настраиваем и запускаем HTTP интерфейс
 	Serial.println("Start WebServer");
 	HTTP_init();
-
+	
+	//Настраиваем и запускаем HTTP интерфейс
+	Serial.println("Start mDNS");
+	mDNS_init();
+	
 	Serial.println("Start Water module");
 	Water_init();
 }
