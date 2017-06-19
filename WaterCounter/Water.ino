@@ -76,6 +76,7 @@ void Water_loop() {
 }
 
 void handle_Set_WaterAlert() {
+	if(!HTTP.authenticate(_http_user.c_str(), _http_password.c_str())) return HTTP.requestAuthentication();
 	error_log("handle_Set_WaterAlert disable=" + HTTP.arg("disable"));
 	if (HTTP.arg("disable").toInt() > 0) {
 		Alert = 0;
@@ -86,6 +87,7 @@ void handle_Set_WaterAlert() {
 }
 
 void handle_Set_WaterCold() {
+	if(!HTTP.authenticate(_http_user.c_str(), _http_password.c_str())) return HTTP.requestAuthentication();
 	ColdWaterCount = HTTP.arg("cold").toInt();
 	water_changes_for_send = true;
 	saveConfig();                         // Функция сохранения данных во Flash
@@ -93,6 +95,7 @@ void handle_Set_WaterCold() {
 }
 
 void handle_Set_WaterHot() {
+	if(!HTTP.authenticate(_http_user.c_str(), _http_password.c_str())) return HTTP.requestAuthentication();
 	HotWaterCount = HTTP.arg("hot").toInt();
 	water_changes_for_send = true;
 	saveConfig();                         // Функция сохранения данных во Flash

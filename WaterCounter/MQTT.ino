@@ -102,6 +102,7 @@ void callbackForMQTT(char* topic, byte* payload, unsigned int length) {
 }
 
 void handle_Set_MQTT() {
+	if(!HTTP.authenticate(_http_user.c_str(), _http_password.c_str())) return HTTP.requestAuthentication();
 	_mqtt_host = HTTP.arg("mqtt_host");
 	_mqtt_port = HTTP.arg("mqtt_port").toInt();
 	_mqtt_user = HTTP.arg("mqtt_user");

@@ -5,6 +5,7 @@ void HTTP_init(void) {
 	HTTP.on("/ssdp", handle_Set_Ssdp);     // Установить имя SSDP устройства по запросу вида /ssdp?ssdp=proba
 	HTTP.on("/ssid", handle_Set_Ssid);     // Установить имя и пароль роутера по запросу вида /ssid?ssid=home2&password=12345678
 	HTTP.on("/ssidap", handle_Set_Ssidap); // Установить имя и пароль для точки доступа по запросу вида /ssidap?ssidAP=home1&passwordAP=8765439
+	HTTP.on("/login", handle_Set_Login);
 	HTTP.on("/restart", handle_Restart);   // Перезагрузка модуля по запросу вида /restart?device=ok
 	// Добавляем функцию Update для перезаписи прошивки по WiFi при 1М(256K SPIFFS) и выше
 	httpUpdater.setup(&HTTP);
@@ -15,6 +16,7 @@ void HTTP_init(void) {
 // Функции API-Set
 // Установка SSDP имени по запросу вида http://192.168.0.101/ssdp?ssdp=proba
 void handle_Set_Ssdp() {
+	if(!HTTP.authenticate(_http_user.c_str(), _http_password.c_str())) return HTTP.requestAuthentication();
 	SSDP_Name = HTTP.arg("ssdp"); // Получаем значение ssdp из запроса сохраняем в глобальной переменной
 	saveConfig();                 // Функция сохранения данных во Flash
 	HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
@@ -22,6 +24,7 @@ void handle_Set_Ssdp() {
 
 // Установка параметров для подключения к внешней AP по запросу вида http://192.168.0.101/ssid?ssid=home2&password=12345678
 void handle_Set_Ssid() {
+	if(!HTTP.authenticate(_http_user.c_str(), _http_password.c_str())) return HTTP.requestAuthentication();
 	_ssid = HTTP.arg("ssid");            // Получаем значение ssid из запроса сохраняем в глобальной переменной
 	_password = HTTP.arg("password");    // Получаем значение password из запроса сохраняем в глобальной переменной
 	saveConfig();                        // Функция сохранения данных во Flash
@@ -29,15 +32,25 @@ void handle_Set_Ssid() {
 }
 
 //Установка параметров внутренней точки доступа по запросу вида http://192.168.0.101/ssidap?ssidAP=home1&passwordAP=8765439
-void handle_Set_Ssidap() {              //
+void handle_Set_Ssidap() {
+	if(!HTTP.authenticate(_http_user.c_str(), _http_password.c_str())) return HTTP.requestAuthentication();
 	_ssidAP = HTTP.arg("ssidAP");         // Получаем значение ssidAP из запроса сохраняем в глобальной переменной
 	_passwordAP = HTTP.arg("passwordAP"); // Получаем значение passwordAP из запроса сохраняем в глобальной переменной
 	saveConfig();                         // Функция сохранения данных во Flash
 	HTTP.send(200, "text/plain", "OK");   // отправляем ответ о выполнении
 }
 
+void handle_Set_Login() {
+	if(!HTTP.authenticate(_http_user.c_str(), _http_password.c_str())) return HTTP.requestAuthentication();
+	_http_user = HTTP.arg("http_user");         
+	_http_password = HTTP.arg("http_password"); 
+	saveConfig();                         // Функция сохранения данных во Flash
+	HTTP.send(200, "text/plain", "OK");   // отправляем ответ о выполнении
+}
+
 // Перезагрузка модуля по запросу вида http://192.168.0.101/restart?device=ok
 void handle_Restart() {
+	if(!HTTP.authenticate(_http_user.c_str(), _http_password.c_str())) return HTTP.requestAuthentication();
 	saveConfig();
 	String restart = HTTP.arg("device");               // Получаем значение device из запроса
 	if (restart == "ok") {                             // Если значение равно Ок
@@ -70,6 +83,9 @@ void handle_ConfigJSON() {
 	json["mqtt_port"] = _mqtt_port;
 	json["mqtt_user"] = _mqtt_user;
 	json["mqtt_password"] = _mqtt_password;
+
+	json["http_user"] = _http_user;
+	json["http_password"] = _http_password;
 	
 	json["SaveCount"] = SaveCount;
 	json["ALERT"] = Alert > 0 ? "Да" : "Нет";

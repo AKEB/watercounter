@@ -39,13 +39,15 @@ void timeSynch(int zone){
 }
 
 // Установка параметров времянной зоны по запросу вида http://192.168.0.101/TimeZone?timezone=3
-void handle_time_zone() {               
+void handle_time_zone() {
+	if(!HTTP.authenticate(_http_user.c_str(), _http_password.c_str())) return HTTP.requestAuthentication();
 	timezone = HTTP.arg("timezone").toInt(); // Получаем значение timezone из запроса конвертируем в int сохраняем в глобальной переменной
 	saveConfig();
 	HTTP.send(200, "text/plain", "OK");
 }
 
 void handle_Time(){
+	if(!HTTP.authenticate(_http_user.c_str(), _http_password.c_str())) return HTTP.requestAuthentication();
 	timeSynch(timezone);
 	HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
 }

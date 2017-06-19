@@ -13,6 +13,7 @@ void FS_init(void) {
 	HTTP.on("/list", HTTP_GET, handleFileList);
 	//загрузка редактора editor
 	HTTP.on("/edit", HTTP_GET, []() {
+		if(!HTTP.authenticate(_http_user.c_str(), _http_password.c_str())) return HTTP.requestAuthentication();
 		if (!handleFileRead("/edit.html")) HTTP.send(404, "text/plain", "FileNotFound");
 	});
 	//Создание файла

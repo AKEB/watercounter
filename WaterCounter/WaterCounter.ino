@@ -29,6 +29,9 @@ String _password = "{password}"; // Для хранения пароля сет�
 String _ssidAP = "WaterCounter";   // SSID AP точки доступа
 String _passwordAP = ""; // пароль точки доступа
 
+String _http_user = "admin";
+String _http_password = "0000";
+
 String _mqtt_host     = "192.168.1.200";
 int _mqtt_port     = 1883;
 String _mqtt_user     = "";
