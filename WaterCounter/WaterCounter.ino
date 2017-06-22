@@ -28,6 +28,7 @@ String _ssid     = "AKEB"; // Для хранения SSID
 String _password = "{password}"; // Для хранения пароля сети
 String _ssidAP = "WaterCounter";   // SSID AP точки доступа
 String _passwordAP = ""; // пароль точки доступа
+IPAddress apIP(192, 168, 0, 1);
 
 String _http_user = "admin";
 String _http_password = "0000";

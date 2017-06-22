@@ -60,7 +60,6 @@ void WIFI_loop() {
 }
 
 bool StartAPMode() {
-	IPAddress apIP(192, 168, 0, 1);
 	// Отключаем WIFI
 	WiFi.disconnect();
 	// Меняем режим на режим точки доступа
