@@ -95,6 +95,8 @@ void handle_ConfigJSON() {
 	json["HotWaterCounter"] = HotWaterCount;
 
 	json["Uptime"] = uptime();
+
+	json["Log"] = Log;
 	
 	// Помещаем созданный json в переменную root
 	root = "";

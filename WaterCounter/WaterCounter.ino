@@ -77,9 +77,7 @@ boolean water_changes_for_send = true;
 WiFiClient wifiClientForMQTT;
 PubSubClient clientForMQTT(wifiClientForMQTT);
 
-#define MAX_SRV_CLIENTS 10
-WiFiServer TelnetServer(23);
-WiFiClient TelnetClients[MAX_SRV_CLIENTS];
+String Log = "";
 
 void error_log(String str) {
 	error_log(str, true);
@@ -90,13 +88,15 @@ void error_log(String str, boolean ln) {
 	
 	if (ln) Serial.println("");
 	
-	Telnet_error_log(str, ln);
+	Log = "[" + (String)GetTime() + "] " + str + "<br>" + Log;
+	
+	if (Log.length() >= 4096) {
+		Log = Log.substring(0, 4096);
+	}
 }
 
 void setup() {
 	HTTP = ESP8266WebServer (port);
-	
-	Telnet_init();
 	
 	Serial.begin(115200);
 	error_log("");
@@ -137,8 +137,6 @@ void setup() {
 
 void loop() {
 	HTTP.handleClient();
-	
-	Telnet_loop();
 	
 	delay(1);
 	Time_loop();

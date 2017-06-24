@@ -16,8 +16,13 @@ function load(){
 		xmlHttp.open('GET','\configs.json',true);
 		xmlHttp.send(null);
 		xmlHttp.onload = function(e) {
-			jsonResponse=JSON.parse(xmlHttp.responseText);
-			loadBlock();
+			var state = this.readyState;
+			var responseCode = xmlHttp.status;
+			console.log("request.onload called. readyState: " + state + "; status: " + responseCode);
+			if (state == this.DONE && responseCode == 200) {
+				jsonResponse=JSON.parse(this.responseText);
+				loadBlock();
+			}
 		}
 	}
 }
