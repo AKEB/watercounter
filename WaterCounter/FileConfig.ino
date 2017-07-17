@@ -53,7 +53,9 @@ bool loadConfig() {
 	_mqtt_port = root["mqtt_port"];
 	_mqtt_user = root["mqtt_user"].as<String>();
 	_mqtt_password = root["mqtt_password"].as<String>();
-
+	
+	_revision = root["revision"].as<String>();
+	
 	_Div1 = root["Div1"];
 	_Div2 = root["Div2"];
 	
@@ -79,7 +81,9 @@ bool saveConfig() {
 	json["HotWaterCount"] = HotWaterCount;
 	json["Alert"] = Alert;
 	json["SaveCount"] = SaveCount;
-	
+
+	json["revision"] = _revision;
+
 	json["mqtt_host"] = _mqtt_host;
 	json["mqtt_port"] = _mqtt_port;
 	json["mqtt_user"] = _mqtt_user;

@@ -45,8 +45,6 @@ void handle_Set_Div() {
 	HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
 }
 
-
-
 //Установка параметров внутренней точки доступа по запросу вида http://192.168.0.101/ssidap?ssidAP=home1&passwordAP=8765439
 void handle_Set_Ssidap() {
 	if(!HTTP.authenticate(_http_user.c_str(), _http_password.c_str())) return HTTP.requestAuthentication();
@@ -99,7 +97,9 @@ void handle_ConfigJSON() {
 	json["mqtt_port"] = _mqtt_port;
 	json["mqtt_user"] = _mqtt_user;
 	json["mqtt_password"] = _mqtt_password;
-
+	
+	json["revision"] = _revision;
+	
 	json["Div1"] = _Div1;
 	json["Div2"] = _Div2;
 
