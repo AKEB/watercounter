@@ -7,6 +7,7 @@ void HTTP_init(void) {
 	HTTP.on("/ssidap", handle_Set_Ssidap); // Установить имя и пароль для точки доступа по запросу вида /ssidap?ssidAP=home1&passwordAP=8765439
 	HTTP.on("/login", handle_Set_Login);
 	HTTP.on("/restart", handle_Restart);   // Перезагрузка модуля по запросу вида /restart?device=ok
+	HTTP.on("/div", handle_Set_Div);     // Установка делителя значения счетчика
 	// Добавляем функцию Update для перезаписи прошивки по WiFi при 1М(256K SPIFFS) и выше
 	httpUpdater.setup(&HTTP);
 	// Запускаем HTTP сервер
@@ -30,6 +31,21 @@ void handle_Set_Ssid() {
 	saveConfig();                        // Функция сохранения данных во Flash
 	HTTP.send(200, "text/plain", "OK");   // отправляем ответ о выполнении
 }
+
+// Установка делителя значения счетчика
+void handle_Set_Div() {
+	if(!HTTP.authenticate(_http_user.c_str(), _http_password.c_str())) return HTTP.requestAuthentication();
+	_Div1 = HTTP.arg("Div1").toInt();
+	_Div2 = HTTP.arg("Div2").toInt();
+	
+	if (_Div1 == 0) _Div1 = 1;
+	if (_Div2 == 0) _Div2 = 1;
+	
+	saveConfig();                 // Функция сохранения данных во Flash
+	HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
+}
+
+
 
 //Установка параметров внутренней точки доступа по запросу вида http://192.168.0.101/ssidap?ssidAP=home1&passwordAP=8765439
 void handle_Set_Ssidap() {
@@ -83,6 +99,9 @@ void handle_ConfigJSON() {
 	json["mqtt_port"] = _mqtt_port;
 	json["mqtt_user"] = _mqtt_user;
 	json["mqtt_password"] = _mqtt_password;
+
+	json["Div1"] = _Div1;
+	json["Div2"] = _Div2;
 
 	json["http_user"] = _http_user;
 	json["http_password"] = _http_password;

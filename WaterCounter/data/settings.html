@@ -67,6 +67,10 @@
 				//alert("Измененя вступят в силу после перезагрузки. Пожалуйта перезагрузите устройство.");
 			}
 			
+			function set_div(submit){
+				server = "/div?div1="+val('div1')+"&div2="+val('div2');
+				send_request(submit,server);
+			}
 		</script>
 	</head>
 	<body onload="load();">
@@ -123,6 +127,12 @@
 					<input id="mqtt_user" value="{{mqtt_user}}" class="form-control" placeholder="Пользователь">
 					<input id="mqtt_password" value="{{mqtt_password}}" pattern=".{1,15}" onfocus="this.type='text'" type="password" class="form-control" placeholder="Пароль">
 					<input class="btn btn-block btn-success" value="Сохранить" onclick="set_mqtt(this);" type="submit">
+					<hr>
+					
+					<h2>Делитель</h2>
+					<input id="div1" value="{{div1}}" class="form-control" placeholder="Делитель для холодной воды">
+					<input id="div2" value="{{div2}}" class="form-control" placeholder="Делитель для горячей воды">
+					<input class="btn btn-block btn-success" value="Сохранить" onclick="set_div(this);" type="submit">
 					<hr>
 					
 					<h2>Точка доступа</h2>

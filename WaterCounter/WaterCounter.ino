@@ -33,6 +33,10 @@ IPAddress apIP(192, 168, 0, 1);
 String _http_user = "admin";
 String _http_password = "0000";
 
+// Делители значений счетчика
+int _Div1 = 100;
+int _Div2 = 100;
+
 String _mqtt_host     = "192.168.1.200";
 int _mqtt_port     = 1883;
 String _mqtt_user     = "";
@@ -40,14 +44,16 @@ String _mqtt_password     = "";
 
 String SSDP_Name = "WaterCounter"; // Имя SSDP
 int timezone = 3;               // часовой пояс GTM
-int ColdWaterCount = 0;
-int HotWaterCount = 0;
+unsigned long ColdWaterCount = 0;
+unsigned long HotWaterCount = 0;
 int Alert = 0;
 int SaveCount = 0;
 
 int ColdWaterState = 0;
 int HotWaterState = 0;
 int AlertState = 0;
+
+
 
 String jsonConfig = "{}";
 int port = 80;
