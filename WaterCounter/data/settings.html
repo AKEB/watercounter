@@ -68,7 +68,7 @@
 			}
 			
 			function set_div(submit){
-				server = "/div?div1="+val('div1')+"&div2="+val('div2');
+				server = "/div?Div1="+val('Div1')+"&Div2="+val('Div2');
 				send_request(submit,server);
 			}
 		</script>
@@ -131,8 +131,8 @@
 					<hr>
 					
 					<h2>Делитель</h2>
-					<input id="div1" value="{{div1}}" class="form-control" placeholder="Делитель для холодной воды">
-					<input id="div2" value="{{div2}}" class="form-control" placeholder="Делитель для горячей воды">
+					<input id="Div1" value="{{Div1}}" class="form-control" placeholder="Делитель для холодной воды">
+					<input id="Div2" value="{{Div2}}" class="form-control" placeholder="Делитель для горячей воды">
 					<input class="btn btn-block btn-success" value="Сохранить" onclick="set_div(this);" type="submit">
 					<hr>
 					

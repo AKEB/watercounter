@@ -16,8 +16,8 @@
 				console.log('handleServerResponse');
 				console.dir(jsonResponse);
 				
-				setValue("ColdWaterCounter", '<input type="text" value="' + Number(jsonResponse.ColdWaterCounter/jsonResponse.Div1).toFixed(2) + '" id="ColdWaterCounter" name="cold" onChange="changeWaterCounter(this, '+jsonResponse.Div1+');" onfocus="stopTimer();" onblur="startTimer();">');
-				setValue("HotWaterCounter", '<input type="text" value="' + Number(jsonResponse.HotWaterCounter/jsonResponse.Div2).toFixed(2) + '" id="HotWaterCounter" name="hot" onChange="changeWaterCounter(this, '+jsonResponse.Div2+');" onfocus="stopTimer();" onblur="startTimer();">');
+				setValue("ColdWaterCounter", '<input type="text" value="' + Number(Number(jsonResponse.ColdWaterCounter)/Number(jsonResponse.Div1)).toFixed(3) + '" id="ColdWaterCounter" name="cold" onChange="changeWaterCounter(this, '+Number(jsonResponse.Div1)+');" onfocus="stopTimer();" onblur="startTimer();">');
+				setValue("HotWaterCounter", '<input type="text" value="' + Number(Number(jsonResponse.HotWaterCounter)/Number(jsonResponse.Div2)).toFixed(3) + '" id="HotWaterCounter" name="hot" onChange="changeWaterCounter(this, '+Number(jsonResponse.Div2)+');" onfocus="stopTimer();" onblur="startTimer();">');
 				if (jsonResponse.ALERT == "Да") {
 					setValue("ALERT", '<a class="btn btn-block btn-danger btn-block" href="/" onClick="disableAlert();">Да</a>');
 				} else {
