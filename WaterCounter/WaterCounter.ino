@@ -23,7 +23,7 @@ ESP8266WebServer HTTP;
 // Для файловой системы
 File fsUploadFile;
 
-String _revision = "1.3"; // Версия кода
+String _revision = "1.4"; // Версия кода
 
 // Определяем переменные wifi
 String _ssid     = "AKEB"; // Для хранения SSID
