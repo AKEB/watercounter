@@ -57,6 +57,16 @@ void WIFI_loop() {
 		}
 		digitalWrite(INNER_LED_PIN, inner_led_state);
 	}
+
+	if (currentMillis < wifi_mode_reconnect_previous_millis) wifi_mode_reconnect_previous_millis = 0;
+	if(currentMillis - wifi_mode_reconnect_previous_millis >= wifi_mode_reconnect_millis) {
+		wifi_mode_reconnect_previous_millis = currentMillis;
+		if (wifi_mode == WIFI_AP) {
+			saveConfig();
+			ESP.restart();
+		}
+	}
+	
 }
 
 bool StartAPMode() {

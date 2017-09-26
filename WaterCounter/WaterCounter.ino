@@ -23,7 +23,6 @@ ESP8266WebServer HTTP;
 // Для файловой системы
 File fsUploadFile;
 
-
 String _revision = "1.3"; // Версия кода
 
 // Определяем переменные wifi
@@ -70,6 +69,8 @@ unsigned long save_previous_millis = 0;
 int wifi_mode_time = 2000;
 int wifi_mode = 0;
 unsigned long wifi_mode_previous_millis = 0;
+int wifi_mode_reconnect_millis = 10*60*1000;
+unsigned long wifi_mode_reconnect_previous_millis = 0;
 int inner_led_state = LOW;
 unsigned long mqtt_reconnect_previous_millis = 0;
 int mqtt_reconnect_interval = 5000;
