@@ -11,6 +11,10 @@
 
 ![WaterCounter_печатная плата.png](https://bitbucket.org/repo/qEzRgg4/images/3705732514-WaterCounter_%D0%BF%D0%B5%D1%87%D0%B0%D1%82%D0%BD%D0%B0%D1%8F%20%D0%BF%D0%BB%D0%B0%D1%82%D0%B0.png)
 
+
+File System install https://github.com/esp8266/arduino-esp8266fs-plugin
+
+
 # Распиновка #
 * Красная лампа - D8 - GPIO15
 * Синяя лампа - D7 - GPIO13
