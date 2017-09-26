@@ -46,19 +46,21 @@ String _mqtt_password     = "";
 
 String SSDP_Name = "WaterCounter"; // Имя SSDP
 int timezone = 3;               // часовой пояс GTM
+int SaveCount = 0;
+
+String jsonConfig = "{}";
+int port = 80;
+
 unsigned long ColdWaterCount = 0;
 unsigned long HotWaterCount = 0;
 int Alert = 0;
-int SaveCount = 0;
-
 int ColdWaterState = 0;
 int HotWaterState = 0;
 int AlertState = 0;
 
 
 
-String jsonConfig = "{}";
-int port = 80;
+
 
 int HighMillis=0;
 int Rollover=0;
