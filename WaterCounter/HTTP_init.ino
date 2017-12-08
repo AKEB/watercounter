@@ -11,7 +11,18 @@ void HTTP_init(void) {
 	// Добавляем функцию Update для перезаписи прошивки по WiFi при 1М(256K SPIFFS) и выше
 	httpUpdater.setup(&HTTP);
 	// Запускаем HTTP сервер
+
+	//here the list of headers to be recorded
+	const char * headerkeys[] = {"User-Agent","Cookie"} ;
+	size_t headerkeyssize = sizeof(headerkeys)/sizeof(char*);
+	//ask server to track these headers
+	HTTP.collectHeaders(headerkeys, headerkeyssize );
+	
 	HTTP.begin();
+}
+
+void HTTP_loop(void) {
+	HTTP.handleClient();
 }
 
 // Функции API-Set
@@ -121,5 +132,6 @@ void handle_ConfigJSON() {
 	root = "";
 	json.printTo(root);
 	HTTP.send(200, "text/json", root);
+	HTTP.close();
 }
 
