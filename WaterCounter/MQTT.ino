@@ -57,7 +57,7 @@ void MQTT_connect() {
 	error_log("MQTT connected");
 
 	// Подписываемся на топики
-	String topic = "home/"+ _ssidAP + "/#";
+	String topic = "akeb/"+ _ssidAP + "/#";
 	error_log("MQTT subscribe to topic "+topic);
 	clientForMQTT.subscribe(topic.c_str());
 }
@@ -69,7 +69,7 @@ void MQTT_publish(String topic, String message) {
 		MQTT_reconnect();
 	}
 	
-	clientForMQTT.publish(topic.c_str(), message.c_str());
+	clientForMQTT.publish(topic.c_str(), message.c_str(), true);
 }
 
 //  Функция вызывается, когда есть изменения по топику на который мы подписаны!
@@ -83,7 +83,7 @@ void callbackForMQTT(char* topic, byte* payload, unsigned int length) {
 	
 	error_log("incoming: "+topic_String+" - "+payload_String);
 	boolean saveConfigNeed = false;
-	String t = "home/"+ _ssidAP + "/";
+	String t = "akeb/"+ _ssidAP + "/";
 	
 	topic_String.remove(0, t.length());
 
@@ -112,4 +112,3 @@ void handle_Set_MQTT() {
 	
 	MQTT_connect();
 }
-
