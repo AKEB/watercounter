@@ -22,9 +22,9 @@ void Water_loop() {
 		water_send_previous_millis = currentMillis;
 		
 		if (water_changes_for_send) {
-			MQTT_publish("home/"+ _ssidAP + "/cold",(String) ColdWaterCount);
-			MQTT_publish("home/"+ _ssidAP + "/hot",(String) HotWaterCount);
-			MQTT_publish("home/"+ _ssidAP + "/alert",(String) Alert);
+			MQTT_publish("akeb/"+ _ssidAP + "/cold",(String) ColdWaterCount);
+			MQTT_publish("akeb/"+ _ssidAP + "/hot",(String) HotWaterCount);
+			MQTT_publish("akeb/"+ _ssidAP + "/alert",(String) Alert);
 			water_changes_for_send = false;
 		}
 	}
@@ -39,7 +39,7 @@ void Water_loop() {
 			ColdWaterState = state;
 			if (ColdWaterState == LOW) {
 				++ColdWaterCount;
-				MQTT_publish("home/"+ _ssidAP + "/cold",(String) ColdWaterCount);
+				MQTT_publish("akeb/"+ _ssidAP + "/cold",(String) ColdWaterCount);
 			}
 		}
 		if (Alert < 1) digitalWrite(BLUE_LED_PIN, !state);
@@ -49,7 +49,7 @@ void Water_loop() {
 			HotWaterState = state;
 			if (HotWaterState == LOW) {
 				++HotWaterCount;
-				MQTT_publish("home/"+ _ssidAP + "/hot",(String) HotWaterCount);
+				MQTT_publish("akeb/"+ _ssidAP + "/hot",(String) HotWaterCount);
 			}
 		}
 		if (Alert < 1) digitalWrite(RED_LED_PIN, !state);
@@ -59,7 +59,7 @@ void Water_loop() {
 			AlertState = state;
 			if (AlertState == LOW) {
 				++Alert;
-				MQTT_publish("home/"+ _ssidAP + "/alert",(String) Alert);
+				MQTT_publish("akeb/"+ _ssidAP + "/alert",(String) Alert);
 			}
 		}
 	}
